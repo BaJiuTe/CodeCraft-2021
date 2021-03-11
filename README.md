@@ -1,9 +1,9 @@
-# HuaweiSoft
+# CodeCraft-2021
 
 ## git 使用教程
 1. 克隆仓库到本地当前目录
 ```bash
-git clone https://github.com/ywm-up/HuaweiSoft.git
+git clone git@github.com:BaJiuTe/CodeCraft-2021.git
 ```
 
 2. 以后每天写代码，都需要 pull 一下仓库，更新版本
