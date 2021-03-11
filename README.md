@@ -1,4 +1,4 @@
-# HuaweiSoft
+# CodeCraft-2021
 
 ## git 使用教程
 1. 克隆仓库到本地当前目录
