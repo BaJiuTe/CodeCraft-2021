@@ -1,11 +1,18 @@
 #include<iostream>
-#include<string.h>
-#include<VisualMachine.h>
+#include<string>
+#include"VisualMachine.h"
 
 using namespace std;
 
+/*
+    / VisualMachine 类构造函数
+    */
+VisualMachine::VisualMachine(string type, int id, int CPUNeed, int memoryNeed, int sigle):
+type(type),id(id),CPUNeed(CPUNeed),memoryNeed(memoryNeed),sigle(sigle)
+{}
 
-
+//无参数的默认构造函数
+VisualMachine::VisualMachine() {};
 
 // getter
 
@@ -33,10 +40,7 @@ int VisualMachine::getServerId() {
     return serverId;
 }
 
-
-
 // setter
-
 void VisualMachine::setType(string type) {
     this->type = type;
 }
@@ -44,7 +48,6 @@ void VisualMachine::setType(string type) {
 void VisualMachine::setId(int id) {
     this->id = id;
 }
-
 
 void VisualMachine::setCPUNeed(int CPUNeed) {
     this->CPUNeed = CPUNeed;
