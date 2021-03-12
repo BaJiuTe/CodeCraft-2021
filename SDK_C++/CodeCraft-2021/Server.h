@@ -28,7 +28,7 @@ public:
     // 构造函数
     Server(string type, int id, int CPUCapacity, int CPULeft, int memoryCapacity, int memoryLeft, int partACPULeft, int partBCPULeft, int partAMemoryLeft, int partBMemoryLeft, int hardwareCost, int dailyCost, int runDay);
     bool isUsed();
-    int totalCost();                // 
+    int totalCost();
 
     
     // getter
