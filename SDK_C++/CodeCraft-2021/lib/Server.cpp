@@ -4,66 +4,117 @@
 
 using namespace std;
 
-/*
-/ �������Ƿ���ʹ��
-/ return bool
-/ 0 û��ʹ�ã�1 ��ʹ��
-*/
-bool Server::isUsed() {
-    return CPUCapacity != CPULeft || memoryCapacity != memoryLeft;
-}
-
+Server::Server() {}
 
 /*
-/ ����������������ܳɱ�
-/ return int
+* 构造函数，只需要给出购入时的初始状态
+* input type：服务器类型
+* input CPUCapacity：CPU 容量
+* input memoryCapacity：内存容量
+* input hardwareCost：硬件成本
+* input dailyCost：日常成本
 */
-int Server::totalCost() {
-    return hardwareCost + runDay * dailyCost;
-}
-
-
-
-
-/*
-/ Server �๹�캯��
-*/
-Server::Server(string type, int id, int CPUCapacity, int CPULeft, int memoryCapacity, int memoryLeft, int partACPULeft, int partBCPULeft,
-    int partAMemoryLeft, int partBMemoryLeft, int hardwareCost, int dailyCost, int runDay)
-    :type(type),
-    id(id), 
-    CPUCapacity(CPUCapacity),
-    CPULeft(CPULeft),
-    memoryCapacity(memoryCapacity),
-    memoryLeft(memoryLeft),
-    partACPULeft(partACPULeft),
-    partBCPULeft(partBCPULeft),
-    partAMemoryLeft(partAMemoryLeft), 
-    partBMemoryLeft(partBMemoryLeft),
-    hardwareCost(hardwareCost), 
-    dailyCost(dailyCost),
-    runDay(runDay)
-{}
-
-//���캯����ֻ��Ҫ��������ʱ�ĳ�ʼ״̬��
 Server::Server(string type, int CPUCapacity, int memoryCapacity, int hardwareCost, int dailyCost)
     : type(type), 
-    id(0), 
+    serverId(0), 
     CPUCapacity(CPUCapacity),
-    CPULeft(CPULeft),
     memoryCapacity(memoryCapacity), 
-    memoryLeft(memoryCapacity),
-    partACPULeft(CPUCapacity), 
-    partBCPULeft(CPUCapacity),
-    partAMemoryLeft(memoryCapacity), 
-    partBMemoryLeft(memoryCapacity),
+    partACPULeft(CPUCapacity / 2), 
+    partBCPULeft(CPUCapacity / 2),
+    partAMemoryLeft(memoryCapacity / 2), 
+    partBMemoryLeft(memoryCapacity / 2),
     hardwareCost(hardwareCost),
     dailyCost(dailyCost), 
-    runDay(0)
+    status(0),
+    mountedVM()
 {}
 
 
-Server::Server() {}
+
+/*
+* 挂载一个虚拟机
+* input VMList：虚拟机列表，类型为vector<VisualMachine>
+* input VMtype：虚拟机类型
+* input VNId：虚拟机id
+* output ：void
+*/
+void Server::mountVM(vector<VisualMachine> VMList, string VMtype, int VMId) {
+    VisualMachine VM;
+
+    // 从虚拟机列表里找到虚拟机的信息
+    for (auto i : VMList) {
+        if (i.getType() == VMtype) {
+            VM = i;
+            break;
+        }
+    }
+
+    // 更新服务器的数据
+    if (VM.getNodeType() == 0) {  // 单节点，哪个节点剩余空间多，就放哪里
+        if (this->getPartACPULeft() > this->getPartBCPULeft()) {
+            this->setPartACPULeft(this->getPartACPULeft() - VM.getCPUNeed()); 
+            this->setPartAMemoryLeft(this->getPartAMemoryLeft() - VM.getMemoryNeed());
+            VM.setDeployNode('A');
+        } else {
+            this->setPartBCPULeft(this->getPartBCPULeft() - VM.getCPUNeed()); 
+            this->setPartBMemoryLeft(this->getPartBMemoryLeft() - VM.getMemoryNeed());
+            VM.setDeployNode('B');
+        }
+    } else {  // 双节点，平分
+        this->setPartACPULeft(this->getPartACPULeft() - VM.getCPUNeed() / 2); 
+        this->setPartAMemoryLeft(this->getPartAMemoryLeft() - VM.getMemoryNeed() / 2);
+        this->setPartBCPULeft(this->getPartBCPULeft() - VM.getCPUNeed() / 2); 
+        this->setPartBMemoryLeft(this->getPartBMemoryLeft() - VM.getMemoryNeed() / 2);
+        VM.setDeployNode('C');
+    }
+    this->setStatus(true);
+
+    // 把虚拟机挂载到服务器上
+    mountedVM[VMId] = VM;
+
+}
+
+
+
+/*
+* 删除该服务器里面的一个虚拟机
+* input VMId：虚拟机id
+* output ：void
+*/
+void Server::deleteVM(int VMId) {
+    // 不判断虚拟机是否在服务器中，在调度中进行判断
+    VisualMachine VM = this->mountedVM[VMId];
+
+    // 对服务器数据进行更新
+    switch(VM.getDeployNode()) {
+        case 'A':
+            this->setPartACPULeft(this->getPartACPULeft() + VM.getCPUNeed()); 
+            this->setPartAMemoryLeft(this->getPartAMemoryLeft() + VM.getMemoryNeed());
+            break;
+        case 'B':
+            this->setPartBCPULeft(this->getPartBCPULeft() - VM.getCPUNeed()); 
+            this->setPartBMemoryLeft(this->getPartBMemoryLeft() - VM.getMemoryNeed());
+            break;
+        case 'C':
+            this->setPartACPULeft(this->getPartACPULeft() + VM.getCPUNeed() / 2); 
+            this->setPartAMemoryLeft(this->getPartAMemoryLeft() + VM.getMemoryNeed() / 2);
+            this->setPartBCPULeft(this->getPartBCPULeft() + VM.getCPUNeed() / 2); 
+            this->setPartBMemoryLeft(this->getPartBMemoryLeft() + VM.getMemoryNeed() / 2);
+            break;
+        default:break;
+    }
+
+    // 将虚拟机从服务器挂载列表中移除
+    this->mountedVM.erase(VMId);
+}
+
+
+
+
+
+
+
+
 
 // getter
 
@@ -71,25 +122,18 @@ string Server::getType() {
     return type;
 }
 
-int Server::getId() {
-    return id;
+int Server::getServerId() {
+    return serverId;
 }
 
 int Server::getCPUCapacity() {
     return CPUCapacity;
 }
 
-int Server::getCPULeft() {
-    return CPULeft;
-}
-
 int Server::getMemoryCapacity() {
     return memoryCapacity;
 }
 
-int Server::getMemoryLeft() {
-    return memoryLeft;
-}
 
 int Server::getPartACPULeft() {
     return partACPULeft;
@@ -115,9 +159,10 @@ int Server::getDailyCost() {
     return dailyCost;
 }
 
-int Server::getRunDay() {
-    return runDay;
+bool Server::getStatus() {
+    return status;
 }
+
 
 
 
@@ -127,25 +172,34 @@ void Server::setType(string type) {
     this->type = type;
 }
 
-void Server::setId(int id) {
-    this->id = id;
+void Server::setServerId(int id) {
+    this->serverId = serverId;
 }
 
 void Server::setCPUCapacity(int CPUCapacity) {
     this->CPUCapacity = CPUCapacity;
 }
 
-void Server::setCPULeft(int CPULeft) {
-    this->CPULeft = CPULeft;
+void Server::setPartACPULeft(int partACPULeft) {
+    this->partACPULeft = partACPULeft;
+}
+
+void Server::setPartBCPULeft(int partBCPULeft) {
+    this->partBCPULeft = partBCPULeft;
 }
 
 void Server::setMemoryCapacity(int memoryCapacity) {
     this->memoryCapacity = memoryCapacity;
 }
 
-void Server::setMemoryLeft(int memoryLeft) {
-    this->memoryLeft = memoryLeft;
+void Server::setPartAMemoryLeft(int partAMemoryLeft) {
+    this->partAMemoryLeft = partAMemoryLeft;
 }
+
+void Server::setPartBMemoryLeft(int partBMemoryLeft) {
+    this->partBMemoryLeft = partBMemoryLeft;
+}
+
 
 void Server::setPartACPULeft(int partACPULeft) {
     this->partACPULeft = partACPULeft;
@@ -171,6 +225,6 @@ void Server::setDailyCost(int dailyCost) {
     this->dailyCost = dailyCost;
 }
 
-void Server::setRunDay(int runDay) {
-    this->runDay = runDay;
+void Server::setStatus(bool status) {
+    this->status = status;
 }

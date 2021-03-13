@@ -25,7 +25,6 @@ int main()
 	// TODO:write standard output
 	// TODO:fflush(stdout);
 
-
 	
 	//用于读取数据的流
 	ifstream reader(path);
@@ -189,14 +188,14 @@ void VirM_info(istringstream& out, map<string, shared_ptr<VisualMachine>>  &sale
 	cout << "虚拟机内存：" << temp->getMemoryNeed()<< "GB" << endl;
 	out >> str;
 	if (atoi(str.c_str())) {
-		temp->setSigle(atoi(str.c_str()));
+		temp->setNodeType(atoi(str.c_str()));
 		str = "双节点";
 	}
 	else {
-		temp->setSigle(atoi(str.c_str()));
+		temp->setNodeType(atoi(str.c_str()));
 		str = "单节点";
 	}
-	cout << "节点部署方式：" << str <<" "<<temp->getSigle()<< endl;
+	cout << "节点部署方式：" << str <<" "<<temp->getNodeType()<< endl;
 
 	saleable.emplace(temp->getType(), temp);
 }

@@ -6,40 +6,45 @@ using namespace std;
 
 class VisualMachine {
 private:
-    string type;           // ĞéÄâ»úÀàĞÍ
-    int id;                // ĞéÄâ»ú id
-    int CPUNeed;           // CPU ĞèÇó
-    int memoryNeed;        // ÄÚ´æĞèÇó
-    int sigle;             // ¼ÇÂ¼µ¥Ë«½Úµã
-    int serverId;          // ²¿Êğµ½ÄÄÒ»¸ö·şÎñÆ÷ÉÏ
+    string type;            // è™šæ‹Ÿæœºç±»å‹
+    int VMId;               // è™šæ‹Ÿæœº id
+    int CPUNeed;            // CPU éœ€æ±‚
+    int memoryNeed;         // å†…å­˜éœ€æ±‚
+    int nodeType;           // èŠ‚ç‚¹ç±»å‹ 0:å•èŠ‚ç‚¹ï¼Œ1ï¼šåŒèŠ‚ç‚¹
+    int serverId;           // éƒ¨ç½²åˆ°å“ªä¸€ä¸ªæœåŠ¡å™¨ä¸Š
+    char deployNode;        // éƒ¨ç½²åˆ°æœåŠ¡å™¨ä¸Šå“ªä¸ªèŠ‚ç‚¹ï¼Œ'A','B','C'ï¼šåŒèŠ‚ç‚¹
+
 
     
 
 
 public:
 
-    /*
-    / VisualMachine Àà¹¹Ôìº¯Êı
-    */
-    VisualMachine(string type, int id, int CPUNeed, int memoryNeed, int sigle);
 
+    // VisualMachine ç±»æ„é€ å‡½æ•°
+    VisualMachine(string type, int VMId, int CPUNeed, int memoryNeed, int sigle);
     VisualMachine();
 
 
-    //////////////////////////////
-    // ÏÂÃæÊÇ getter ºÍ setter    
+
+
+
+    // getter    
     string getType();
-    int getId();
+    int getVMId();
     int getCPUNeed();
     int getMemoryNeed();
-    int getSigle();
+    int getNodeType();
     int getServerId();
+    char getDeployNode();
 
 
+    // setter
     void setType(string type);
-    void setId(int id);
+    void setVMId(int VMId);
     void setCPUNeed(int CPUNeed);
     void setMemoryNeed(int memoryNeed);
-    void setSigle(int sigle);
+    void setNodeType(int nodeType);
     void setServerId(int serverId);
+    void setDeployNode(char nodeType);
 };

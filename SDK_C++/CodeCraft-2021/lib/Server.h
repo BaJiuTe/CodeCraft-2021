@@ -1,74 +1,70 @@
 #pragma once
 #include<iostream>
 #include<string.h>
+#include<map>
+#include<vector> 
+#include "VisualMachine.h"
 
 using namespace std;
 
-// ·şÎñÆ÷Àà
+
 class Server {
 private:
-    string type;            // ·şÎñÆ÷ÀàĞÍ
-    int id;                 // ·şÎñÆ÷ id
-    int CPUCapacity;        // CPU ×ÜÈİÁ¿
-    int CPULeft;            // CPU Ê£Óà
-    int memoryCapacity;     // ÄÚ´æÈİÁ¿
-    int memoryLeft;         // ÄÚ´æÊ£Óà
-    int partACPULeft;       // A ½Úµã CPU Ê£Óà
-    int partBCPULeft;       // B ½Úµã CPU Ê£Óà
-    int partAMemoryLeft;    // A ½ÚµãÄÚ´æÊ£Óà
-    int partBMemoryLeft;    // B ½ÚµãÄÚ´æÊ£Óà
-    int hardwareCost;       // Ó²¼ş³É±¾
-    int dailyCost;          // ÈÕ³£ÄÜºÄ³É±¾
-    int runDay;             // ·şÎñÆ÷ÔËĞĞÌìÊı
-
-    // ¶¨ÒåÒ»¸ö map ÓÃÀ´´æ¹ÒÔØÔÚ¸Ã·şÎñÆ÷ÉÏµÄĞéÄâ»ú
+    string type;                        // æœåŠ¡å™¨ç±»å‹
+    int serverId;                       // æœåŠ¡å™¨ id, id ä» 0 é€’å¢
+    int CPUCapacity;                    // CPU æ€»å®¹é‡
+    int partACPULeft;                   // A èŠ‚ç‚¹ CPU å‰©ä½™
+    int partBCPULeft;                   // B èŠ‚ç‚¹ CPU å‰©ä½™
+    int memoryCapacity;                 // å†…å­˜å®¹é‡
+    int partAMemoryLeft;                // A èŠ‚ç‚¹å†…å­˜å‰©ä½™
+    int partBMemoryLeft;                // B èŠ‚ç‚¹å†…å­˜å‰©ä½™
+    int hardwareCost;                   // ç¡¬ä»¶æˆæœ¬
+    int dailyCost;                      // æ—¥å¸¸èƒ½è€—æˆæœ¬
+    bool status;                        // æœåŠ¡å™¨çŠ¶æ€ï¼Œé»˜è®¤å…³é—­ï¼Œåœ¨ add | del | migration çš„æ—¶å€™è®¾ç½®
 
 
 
 public:
-    // ¹¹Ôìº¯Êı
-    Server(string type, int id, int CPUCapacity, int CPULeft, int memoryCapacity, int memoryLeft, 
-        int partACPULeft, int partBCPULeft, int partAMemoryLeft, int partBMemoryLeft, 
-        int hardwareCost, int dailyCost, int runDay);
+    map<int, VisualMachine> mountedVM;  // æŒ‚è½½çš„è™šæ‹Ÿæœºï¼Œåˆå§‹ä¸ºç©º <è™šæ‹Ÿæœº idï¼Œ è™šæ‹Ÿæœºæ‰€æœ‰ä¿¡æ¯>
     
-    //¹¹Ôìº¯Êı£¬Ö»ĞèÒª¸ø³ö¹ºÈëÊ±µÄ³õÊ¼×´Ì¬£¬
-    Server(string type,int CPUCapacity,int memoryCapacity,int hardwareCost,int dailyCost);
-
-    //Ä¬ÈÏ¹¹Ôì
     Server();
 
+    // æ„é€ å‡½æ•°ï¼Œåªéœ€è¦ç»™å‡ºè´­å…¥æ—¶çš„åˆå§‹çŠ¶æ€
+    Server(string type,int CPUCapacity,int memoryCapacity,int hardwareCost,int dailyCost);
 
-    bool isUsed();
-    int totalCost();                // 
+    // æŒ‚è½½ä¸€ä¸ªè™šæ‹Ÿæœº
+    void mountVM(vector<VisualMachine> VMList, string VMtype, int VMId);
+
+    // åˆ é™¤æœåŠ¡å™¨é‡Œé¢çš„ä¸€ä¸ªè™šæ‹Ÿæœº
+    void deleteVM(int VMId);
+
+
+
 
     // getter
     string getType();
-    int getId();
+    int getServerId();
     int getCPUCapacity();
-    int getCPULeft();
-    int getMemoryCapacity();
-    int getMemoryLeft();
     int getPartACPULeft();
     int getPartBCPULeft();
+    int getMemoryCapacity();
     int getPartAMemoryLeft();
     int getPartBMemoryLeft();
     int getHardwareCost();
     int getDailyCost();
-    int getRunDay();
+    bool getStatus();
 
     // setter
     void setType(string type);
-    void setId(int id);
+    void setServerId(int serverId);
     void setCPUCapacity(int CPUCapacity);
-    void setCPULeft(int CPULeft);
-    void setMemoryCapacity(int memoryCapacity);
-    void setMemoryLeft(int memoryLeft);
     void setPartACPULeft(int partACPULeft);
     void setPartBCPULeft(int partBCPULeft);
+    void setMemoryCapacity(int memoryCapacity);
     void setPartAMemoryLeft(int partAMemoryLeft);
     void setPartBMemoryLeft(int partBMemoryLeft);
     void setHardwareCost(int hardwareCost);
     void setDailyCost(int dailyCost);
-    void setRunDay(int runDay);
+    void setStatus(bool status);
 
 };

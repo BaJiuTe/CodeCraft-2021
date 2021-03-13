@@ -5,14 +5,21 @@
 using namespace std;
 
 /*
-    / VisualMachine Àà¹¹Ôìº¯Êý
-    */
-VisualMachine::VisualMachine(string type, int id, int CPUNeed, int memoryNeed, int sigle):
-type(type),id(id),CPUNeed(CPUNeed),memoryNeed(memoryNeed),sigle(sigle)
+*  VisualMachine ç±»æž„é€ å‡½æ•°
+*/
+VisualMachine::VisualMachine(string type, int id, int CPUNeed, int memoryNeed, int nodeType):
+    type(type),
+    VMId(VMId),
+    CPUNeed(CPUNeed),
+    memoryNeed(memoryNeed),
+    nodeType(nodeType)
 {}
 
-//ÎÞ²ÎÊýµÄÄ¬ÈÏ¹¹Ôìº¯Êý
+// æ— å‚æ•°çš„é»˜è®¤æž„é€ å‡½æ•°
 VisualMachine::VisualMachine() {};
+
+
+
 
 // getter
 
@@ -20,8 +27,8 @@ string VisualMachine::getType() {
     return type;
 }
 
-int VisualMachine::getId() {
-    return id;
+int VisualMachine::getVMId() {
+    return VMId;
 }
 
 int VisualMachine::getCPUNeed() {
@@ -32,21 +39,26 @@ int VisualMachine::getMemoryNeed() {
     return memoryNeed;
 }
 
-int VisualMachine::getSigle() {
-    return sigle;
+int VisualMachine::getNodeType() {
+    return nodeType;
 }
 
 int VisualMachine::getServerId() {
     return serverId;
 }
 
+char VisualMachine::getDeployNode() {
+    return deployNode;
+}
+
+
 // setter
 void VisualMachine::setType(string type) {
     this->type = type;
 }
 
-void VisualMachine::setId(int id) {
-    this->id = id;
+void VisualMachine::setVMId(int VMId) {
+    this->VMId = VMId;
 }
 
 void VisualMachine::setCPUNeed(int CPUNeed) {
@@ -57,10 +69,14 @@ void VisualMachine::setMemoryNeed(int memoryNeed) {
     this->memoryNeed = memoryNeed;
 }
 
-void VisualMachine::setSigle(int sigle) {
-    this->sigle = sigle;
+void VisualMachine::setNodeType(int nodeType) {
+    this->nodeType = nodeType;
 }
 
 void VisualMachine::setServerId(int serverId) {
     this->serverId = serverId;
+}
+
+void VisualMachine::setDeployNode(char deployNode) {
+    this->deployNode = deployNode;
 }
