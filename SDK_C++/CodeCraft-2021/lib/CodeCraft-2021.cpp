@@ -1,4 +1,4 @@
-﻿#include "iostream"
+#include "iostream"
 #include<istream>
 #include<fstream>
 #include<string>
@@ -165,6 +165,7 @@ void Request_info(istringstream& out, ResCtrl& resouce)
 }
 
 
+
 //该函数用于读取一天序列，并对每一条信息进行解析；
 streamoff Day_task(ifstream& line, streamoff start, ResCtrl& resouce)
 {
@@ -199,6 +200,8 @@ streamoff Day_task(ifstream& line, streamoff start, ResCtrl& resouce)
 /**********************************************************
 * 主函数
 **********************************************************/
+
+
 
 int main()
 {
@@ -236,6 +239,7 @@ int main()
 	这段代码用于读取可采购服务器的数量，以及对可采购服务器的信息的解析
 
 	******************************************************************************/
+
 
 
 	//读取可采购服务器种类数目
