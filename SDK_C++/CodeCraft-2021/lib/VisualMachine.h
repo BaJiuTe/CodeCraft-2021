@@ -1,38 +1,33 @@
+#pragma once
 #include<iostream>
 #include<string.h>
 
 using namespace std;
 
-class VisualMachine{
+class VisualMachine {
 private:
-    string type;           // è™šæ‹Ÿæœºç±»å‹
-    int id;                // è™šæ‹Ÿæœº id
-    int CPUNeed;           // CPU éœ€æ±‚
-    int memoryNeed;        // å†…å­˜éœ€æ±‚
-    int sigle;             // è®°å½•å•åŒèŠ‚ç‚¹
-    int serverId;          // éƒ¨ç½²åˆ°å“ªä¸€ä¸ªæœåŠ¡å™¨ä¸Š
+    string type;           // ĞéÄâ»úÀàĞÍ
+    int id;                // ĞéÄâ»ú id
+    int CPUNeed;           // CPU ĞèÇó
+    int memoryNeed;        // ÄÚ´æĞèÇó
+    int sigle;             // ¼ÇÂ¼µ¥Ë«½Úµã
+    int serverId;          // ²¿Êğµ½ÄÄÒ»¸ö·şÎñÆ÷ÉÏ
+
     
+
 
 public:
 
-
-
-
-
-
     /*
-    / VisualMachine ç±»æ„é€ å‡½æ•°
+    / VisualMachine Àà¹¹Ôìº¯Êı
     */
-    VisualMachine(string type, int id, int CPUNeed, int memoryNeed, int sigle) {
-        this->type = type;
-        this->id = id;
-        this->CPUNeed = CPUNeed;
-        this->memoryNeed = memoryNeed;
-        this->sigle = sigle;
-    }
+    VisualMachine(string type, int id, int CPUNeed, int memoryNeed, int sigle);
+
+    VisualMachine();
+
 
     //////////////////////////////
-    // ä¸‹é¢æ˜¯ getter å’Œ setter    
+    // ÏÂÃæÊÇ getter ºÍ setter    
     string getType();
     int getId();
     int getCPUNeed();

@@ -1,36 +1,46 @@
+#pragma once
 #include<iostream>
 #include<string.h>
 
 using namespace std;
 
-// æœåŠ¡å™¨ç±»
+// ·şÎñÆ÷Àà
 class Server {
 private:
-    string type;            // æœåŠ¡å™¨ç±»å‹
-    int id;                 // æœåŠ¡å™¨ id
-    int CPUCapacity;        // CPU æ€»å®¹é‡
-    int CPULeft;            // CPU å‰©ä½™
-    int memoryCapacity;     // å†…å­˜å®¹é‡
-    int memoryLeft;         // å†…å­˜å‰©ä½™
-    int partACPULeft;       // A èŠ‚ç‚¹ CPU å‰©ä½™
-    int partBCPULeft;       // B èŠ‚ç‚¹ CPU å‰©ä½™
-    int partAMemoryLeft;    // A èŠ‚ç‚¹å†…å­˜å‰©ä½™
-    int partBMemoryLeft;    // B èŠ‚ç‚¹å†…å­˜å‰©ä½™
-    int hardwareCost;       // ç¡¬ä»¶æˆæœ¬
-    int dailyCost;          // æ—¥å¸¸èƒ½è€—æˆæœ¬
-    int runDay;             // æœåŠ¡å™¨è¿è¡Œå¤©æ•°
-    
-    // å®šä¹‰ä¸€ä¸ª map ç”¨æ¥å­˜æŒ‚è½½åœ¨è¯¥æœåŠ¡å™¨ä¸Šçš„è™šæ‹Ÿæœº
+    string type;            // ·şÎñÆ÷ÀàĞÍ
+    int id;                 // ·şÎñÆ÷ id
+    int CPUCapacity;        // CPU ×ÜÈİÁ¿
+    int CPULeft;            // CPU Ê£Óà
+    int memoryCapacity;     // ÄÚ´æÈİÁ¿
+    int memoryLeft;         // ÄÚ´æÊ£Óà
+    int partACPULeft;       // A ½Úµã CPU Ê£Óà
+    int partBCPULeft;       // B ½Úµã CPU Ê£Óà
+    int partAMemoryLeft;    // A ½ÚµãÄÚ´æÊ£Óà
+    int partBMemoryLeft;    // B ½ÚµãÄÚ´æÊ£Óà
+    int hardwareCost;       // Ó²¼ş³É±¾
+    int dailyCost;          // ÈÕ³£ÄÜºÄ³É±¾
+    int runDay;             // ·şÎñÆ÷ÔËĞĞÌìÊı
+
+    // ¶¨ÒåÒ»¸ö map ÓÃÀ´´æ¹ÒÔØÔÚ¸Ã·şÎñÆ÷ÉÏµÄĞéÄâ»ú
 
 
 
 public:
-    // æ„é€ å‡½æ•°
-    Server(string type, int id, int CPUCapacity, int CPULeft, int memoryCapacity, int memoryLeft, int partACPULeft, int partBCPULeft, int partAMemoryLeft, int partBMemoryLeft, int hardwareCost, int dailyCost, int runDay);
+    // ¹¹Ôìº¯Êı
+    Server(string type, int id, int CPUCapacity, int CPULeft, int memoryCapacity, int memoryLeft, 
+        int partACPULeft, int partBCPULeft, int partAMemoryLeft, int partBMemoryLeft, 
+        int hardwareCost, int dailyCost, int runDay);
+    
+    //¹¹Ôìº¯Êı£¬Ö»ĞèÒª¸ø³ö¹ºÈëÊ±µÄ³õÊ¼×´Ì¬£¬
+    Server(string type,int CPUCapacity,int memoryCapacity,int hardwareCost,int dailyCost);
+
+    //Ä¬ÈÏ¹¹Ôì
+    Server();
+
+
     bool isUsed();
     int totalCost();                // 
 
-    
     // getter
     string getType();
     int getId();

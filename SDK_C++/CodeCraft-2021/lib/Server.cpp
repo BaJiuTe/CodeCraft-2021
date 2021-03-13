@@ -1,13 +1,13 @@
 #include<iostream>
 #include<string.h>
-#include<Server.h>
+#include"Server.h"
 
 using namespace std;
 
 /*
-/ æœåŠ¡å™¨æ˜¯å¦åœ¨ä½¿ç”¨
+/ ·şÎñÆ÷ÊÇ·ñÔÚÊ¹ÓÃ
 / return bool
-/ 0 æ²¡åœ¨ä½¿ç”¨ï¼Œ1 åœ¨ä½¿ç”¨
+/ 0 Ã»ÔÚÊ¹ÓÃ£¬1 ÔÚÊ¹ÓÃ
 */
 bool Server::isUsed() {
     return CPUCapacity != CPULeft || memoryCapacity != memoryLeft;
@@ -15,7 +15,7 @@ bool Server::isUsed() {
 
 
 /*
-/ è®¡ç®—è¿™ä¸ªæœåŠ¡å™¨çš„æ€»æˆæœ¬
+/ ¼ÆËãÕâ¸ö·şÎñÆ÷µÄ×Ü³É±¾
 / return int
 */
 int Server::totalCost() {
@@ -26,14 +26,44 @@ int Server::totalCost() {
 
 
 /*
-/ Server ç±»æ„é€ å‡½æ•°
-*/ 
-Server::Server(string type, int id, int CPUCapacity, int CPULeft, int memoryCapacity,int memoryLeft, int partACPULeft, int partBCPULeft,
-                int partAMemoryLeft, int partBMemoryLeft, int hardwareCost, int dailyCost, int runDay) 
-                :type(type), id(id), CPUCapacity(CPUCapacity), memoryCapacity(memoryCapacity), memoryLeft(memoryLeft), partACPULeft(partACPULeft), partBCPULeft(partBCPULeft),
-                partAMemoryLeft(partAMemoryLeft), partBMemoryLeft(partBMemoryLeft), hardwareCost(hardwareCost), dailyCost(dailyCost), runDay(runDay)                
-                {}
+/ Server Àà¹¹Ôìº¯Êı
+*/
+Server::Server(string type, int id, int CPUCapacity, int CPULeft, int memoryCapacity, int memoryLeft, int partACPULeft, int partBCPULeft,
+    int partAMemoryLeft, int partBMemoryLeft, int hardwareCost, int dailyCost, int runDay)
+    :type(type),
+    id(id), 
+    CPUCapacity(CPUCapacity),
+    CPULeft(CPULeft),
+    memoryCapacity(memoryCapacity),
+    memoryLeft(memoryLeft),
+    partACPULeft(partACPULeft),
+    partBCPULeft(partBCPULeft),
+    partAMemoryLeft(partAMemoryLeft), 
+    partBMemoryLeft(partBMemoryLeft),
+    hardwareCost(hardwareCost), 
+    dailyCost(dailyCost),
+    runDay(runDay)
+{}
 
+//¹¹Ôìº¯Êı£¬Ö»ĞèÒª¸ø³ö¹ºÈëÊ±µÄ³õÊ¼×´Ì¬£¬
+Server::Server(string type, int CPUCapacity, int memoryCapacity, int hardwareCost, int dailyCost)
+    : type(type), 
+    id(0), 
+    CPUCapacity(CPUCapacity),
+    CPULeft(CPULeft),
+    memoryCapacity(memoryCapacity), 
+    memoryLeft(memoryCapacity),
+    partACPULeft(CPUCapacity), 
+    partBCPULeft(CPUCapacity),
+    partAMemoryLeft(memoryCapacity), 
+    partBMemoryLeft(memoryCapacity),
+    hardwareCost(hardwareCost),
+    dailyCost(dailyCost), 
+    runDay(0)
+{}
+
+
+Server::Server() {}
 
 // getter
 
