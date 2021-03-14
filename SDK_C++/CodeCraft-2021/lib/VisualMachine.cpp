@@ -1,5 +1,6 @@
 #include<iostream>
 #include<string>
+#include"Server.h"
 #include"VisualMachine.h"
 
 using namespace std;

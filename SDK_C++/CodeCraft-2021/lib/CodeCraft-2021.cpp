@@ -7,7 +7,7 @@
 #include<memory>
 #include"Server.h"
 #include"VisualMachine.h"
-#include "ResCtrl.h"
+
 
 using namespace std;
 
@@ -17,7 +17,8 @@ using namespace std;
 //void Request_info(istringstream& out);
 //streamoff Day_task(ifstream& line, streamoff start, int date);
 
-string path("../../training-data/data.txt");
+
+string path("data.txt");
 
 //每次读取文件的一行，并返回下一行的文件游标；
 streamoff read_line(ifstream& line, string& str, streamoff start)
@@ -101,36 +102,16 @@ void VirM_info(istringstream& out, map<string, shared_ptr<VisualMachine>>& salea
 		temp->setNodeType(atoi(str.c_str()));
 		str = "单节点";
 	}
-
 	cout << "节点部署方式：" << str << " " << temp->getNodeType() << endl;
 
 	saleable.emplace(temp->getType(), temp);
 }
 
 
-//部署一台虚拟机
-void DeployVM(ResCtrl& resouce, VisualMachine& vir) {
-
-
-
-	//如果服务器为空，则购买
-
-	if (resouce.getBoughtServ().empty()) {
-		resouce.getBoughtServ()[0] = *(resouce.getSERpurcheable()["NV603"]);
-	}
-
-	//寻找可以部署的服务器,并部署,注意单双节点的部署方式
-	for (auto it = resouce.getBoughtServ().begin(); it != resouce.getBoughtServ().end(); it++)
-	{
-		Server& s = it->second;
-
-	}
-
-}
 
 
 //该函数用于解析一条请求序列的信息
-void Request_info(istringstream& out, ResCtrl& resouce)
+void Request_info(istringstream& out)
 {
 	string str;
 	string type;
@@ -148,12 +129,6 @@ void Request_info(istringstream& out, ResCtrl& resouce)
 		//str.pop_back();
 		ID = atoi(str.c_str());
 		cout << "ID：" << ID << endl;
-
-		//添加虚拟机到已部署虚拟机列表
-		resouce.getDeployedVM()[ID] = *(resouce.getVMsaleable()[type]);
-		//将虚拟机部署到服务器,并修改相应的服务器参数
-		//DeployVM(resouce, *(resouce.getVMsaleable()[type]));
-		//
 	}
 	else if (str == "del") {
 		cout << "请求删除虚拟机" << "  ";
@@ -167,7 +142,7 @@ void Request_info(istringstream& out, ResCtrl& resouce)
 
 
 //该函数用于读取一天序列，并对每一条信息进行解析；
-streamoff Day_task(ifstream& line, streamoff start, ResCtrl& resouce)
+streamoff Day_task(ifstream& line, streamoff start)
 {
 	//判断文件是否打开，若未打开则打开
 	if (!line.is_open())
@@ -191,7 +166,7 @@ streamoff Day_task(ifstream& line, streamoff start, ResCtrl& resouce)
 		start = read_line(line, str, start);
 		cout << str << endl;
 		istringstream out(str);
-		Request_info(out, resouce);
+		Request_info(out);
 	}
 
 	return start;
@@ -231,15 +206,11 @@ int main()
 	//当删除或添加虚拟机时应该修改相应服务器的资源剩余。
 	map<int, Server&>BoughtServ;
 
-	//resouce 为资源管理类
-	ResCtrl resouce(VMsaleable, SERpurcheable, DeployedVM, BoughtServ);
-
 	/*****************************************************************************
 
 	这段代码用于读取可采购服务器的数量，以及对可采购服务器的信息的解析
 
 	******************************************************************************/
-
 
 
 	//读取可采购服务器种类数目
@@ -256,9 +227,6 @@ int main()
 		istringstream out(temp);
 		Serv_info(out, SERpurcheable);
 
-	}
-	for (auto it = resouce.getSERpurcheable().begin(); it != resouce.getSERpurcheable().end(); it++) {
-		cout << it->first << " " << (it->second)->getHardwareCost() << endl;
 	}
 
 	/*****************************************************************************
@@ -292,6 +260,7 @@ int main()
 
 	******************************************************************************/
 
+
 	now = read_line(reader, temp, now);
 	cout << temp << endl;
 
@@ -300,7 +269,9 @@ int main()
 	cout << "there are requests of" << n << "days" << endl;
 	for (int i = 0; i < n; i++) {
 
-		now = Day_task(reader, now, resouce);
+		now = Day_task(reader, now);
+
 	}
+
 	return 0;
 }

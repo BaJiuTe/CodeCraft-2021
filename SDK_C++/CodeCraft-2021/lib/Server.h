@@ -30,10 +30,10 @@ public:
     Server();
 
     // 构造函数，只需要给出购入时的初始状态
-    Server(string type,int CPUCapacity,int memoryCapacity,int hardwareCost,int dailyCost);
+    Server(string type, int serverId, int CPUCapacity, int memoryCapacity, int hardwareCost, int dailyCost);
 
     // 挂载一个虚拟机
-    void mountVM(vector<VisualMachine> VMList, string VMtype, int VMId);
+    void mountVM(map<string, shared_ptr<VisualMachine>>& VMsaleable, string VMtype, int VMId);
 
     // 删除服务器里面的一个虚拟机
     void deleteVM(int VMId);

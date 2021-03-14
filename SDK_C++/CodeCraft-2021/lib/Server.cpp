@@ -1,4 +1,5 @@
 #include<iostream>
+#include<memory>
 #include<string.h>
 #include"Server.h"
 
@@ -14,9 +15,9 @@ Server::Server() {}
 * input hardwareCost：硬件成本
 * input dailyCost：日常成本
 */
-Server::Server(string type, int CPUCapacity, int memoryCapacity, int hardwareCost, int dailyCost)
+Server::Server(string type, int serverId, int CPUCapacity, int memoryCapacity, int hardwareCost, int dailyCost)
     : type(type), 
-    serverId(0), 
+    serverId(serverId), 
     CPUCapacity(CPUCapacity),
     memoryCapacity(memoryCapacity), 
     partACPULeft(CPUCapacity / 2), 
@@ -38,16 +39,10 @@ Server::Server(string type, int CPUCapacity, int memoryCapacity, int hardwareCos
 * input VNId：虚拟机id
 * output ：void
 */
-void Server::mountVM(vector<VisualMachine> VMList, string VMtype, int VMId) {
-    VisualMachine VM;
-
-    // 从虚拟机列表里找到虚拟机的信息
-    for (auto i : VMList) {
-        if (i.getType() == VMtype) {
-            VM = i;
-            break;
-        }
-    }
+void Server::mountVM(map<string, shared_ptr<VisualMachine>>& VMsaleable, string VMtype, int VMId) {   // 这里改成 map
+    
+    // 拿到虚拟机的引用
+    VisualMachine &VM = *(VMsaleable[VMtype]);
 
     // 更新服务器的数据
     if (VM.getNodeType() == 0) {  // 单节点，哪个节点剩余空间多，就放哪里
