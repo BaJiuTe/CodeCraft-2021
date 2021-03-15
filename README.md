@@ -48,8 +48,6 @@ git push -u origin main
 | getter | 获取类里面的私有参数 |
 | setter | 修改类里面的私有参数 |
 | Server(string type,int CPUCapacity,int memoryCapacity,int hardwareCost,int dailyCost); | 构造函数（类型，CPU，内存，硬件成本，每日成本） |
-| void mountVM(vector<VisualMachine> VMList, string VMtype, int VMId); | 挂载一个虚拟机到服务器上（可购买虚拟机列表，虚拟机类型，虚拟机id） |
-| void deleteVM(int VMId); | 删除该服务器里面的一个虚拟机（虚拟机id） |
 
 ### VisualMachine 类
 | 参数 | 描述 |
@@ -66,6 +64,7 @@ git push -u origin main
 | -- | -- |
 | getter | 获取类里面的私有参数 |
 | setter | 修改类里面的私有参数 |
+
 
 ### 读数据
 #### 服务器
