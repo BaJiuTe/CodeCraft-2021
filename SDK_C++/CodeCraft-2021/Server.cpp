@@ -20,12 +20,12 @@ Server::Server():
 {}
 
 /*
-* ¹¹Ôìº¯Êı£¬Ö»ĞèÒª¸ø³ö¹ºÈëÊ±µÄ³õÊ¼×´Ì¬
-* input type£º·şÎñÆ÷ÀàĞÍ
-* input CPUCapacity£ºCPU ÈİÁ¿
-* input memoryCapacity£ºÄÚ´æÈİÁ¿
-* input hardwareCost£ºÓ²¼ş³É±¾
-* input dailyCost£ºÈÕ³£³É±¾
+* æ„é€ å‡½æ•°ï¼Œåªéœ€è¦ç»™å‡ºè´­å…¥æ—¶çš„åˆå§‹çŠ¶æ€
+* input typeï¼šæœåŠ¡å™¨ç±»å‹
+* input CPUCapacityï¼šCPU å®¹é‡
+* input memoryCapacityï¼šå†…å­˜å®¹é‡
+* input hardwareCostï¼šç¡¬ä»¶æˆæœ¬
+* input dailyCostï¼šæ—¥å¸¸æˆæœ¬
 */
 Server::Server(string type, int serverId, int CPUCapacity, int memoryCapacity, int hardwareCost, int dailyCost)
     : type(type), 

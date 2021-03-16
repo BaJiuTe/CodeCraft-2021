@@ -15,29 +15,70 @@ public:
 
 
     /**
-     * ²¿ÊğÒ»¸öĞéÄâ»ú
-     * input BoughtServ£ºÒÑ¾­¹ºÂòµÄ·şÎñÆ÷µÄ map
-     * input VMsaleable£º¿É¹ºÂòµÄĞéÄâ»úÁĞ±íµÄ map
-     * input VMType£ºĞéÄâ»úĞÍºÅ
-     * input VMId£ºĞéÄâ»ú id
+     * éƒ¨ç½²ä¸€ä¸ªè™šæ‹Ÿæœº
+     * input BoughtServï¼šå·²ç»è´­ä¹°çš„æœåŠ¡å™¨çš„ map
+     * input VMsaleableï¼šå¯è´­ä¹°çš„è™šæ‹Ÿæœºåˆ—è¡¨çš„ map
+     * input VMTypeï¼šè™šæ‹Ÿæœºå‹å·
+     * input VMIdï¼šè™šæ‹Ÿæœº id
      */
+    void showMessage(map<string, shared_ptr<VisualMachine>> VMsaleable, map<int, shared_ptr<Server>> BoughtServ, map<int, shared_ptr<VisualMachine>> DeployedVM) {
+
+        /*cout << "============å¯è´­ä¹°çš„æœåŠ¡å™¨åˆ—è¡¨============" << endl;
+        for (auto iter : SERpurcheable) {
+            cout << "ï¼ˆ" << iter.second->getType() << "ï¼Œ" << iter.second->getServerId() << ", " << iter.second->getPartACPULeft() << ", " << iter.second->getPartBCPULeft() << ", " << iter.second->getPartAMemoryLeft() << ", " << iter.second->getPartBMemoryLeft() << ")" << endl;
+        }
+        cout << "========================================" << endl;
+
+
+        cout << "============å¯è´­ä¹°çš„è™šæ‹Ÿæœºåˆ—è¡¨============" << endl;
+        for (auto iter : VMsaleable) {
+            cout << "ï¼ˆ" << iter.second->getType() << "ï¼Œ" << iter.second->getVMId() << ", " << iter.second->getCPUNeed() << ", " << iter.second->getMemoryNeed() << ", " << iter.second->getNodeType() << ", " << iter.second->getServerId() << ", " << iter.second->getDeployNode() << ")" << endl;
+        }
+        cout << "========================================" << endl;*/
+
+        cout << "============å·²è´­ä¹°çš„æœåŠ¡å™¨èµ„æºåˆ—è¡¨============" << endl;
+        for (auto iter : BoughtServ) {
+            cout << "ï¼ˆ" << iter.second->getType() << "ï¼Œ" << iter.second->getServerId() << ", " << iter.second->getPartACPULeft() << ", " << iter.second->getPartBCPULeft() << ", " << iter.second->getPartAMemoryLeft() << ", " << iter.second->getPartBMemoryLeft() << ")" << endl;
+        }
+        cout << "========================================" << endl;
+
+        cout << "============å·²éƒ¨ç½²çš„è™šæ‹Ÿæœºåˆ—è¡¨============" << endl;
+        for (auto iter : DeployedVM) {
+            cout << "ï¼ˆ" << iter.second->getType() << "ï¼Œ" << iter.second->getVMId() << ", " << iter.second->getCPUNeed() << ", " << iter.second->getMemoryNeed() << ", " << iter.second->getNodeType() << ", " << iter.second->getServerId() << ", " << iter.second->getDeployNode() << ")" << endl;
+        }
+        cout << "========================================" << endl;
+
+    }
+
+
+    /**
+    * æ·»åŠ ä¸€ä¸ªè™šæ‹Ÿæœº
+    * input map<int, Server&>BoughtServï¼šå·²ç»è´­ä¹°çš„æœåŠ¡å™¨åˆ—è¡¨
+    * input shared_ptr<VisualMachine>>& DeployedVM:å·²ç»éƒ¨ç½²çš„è™šæ‹Ÿæœº
+    * input map<string, shared_ptr<VisualMachine>>& VMsaleableï¼šå¯è´­ä¹°çš„è™šæ‹Ÿæœº
+    * input string VMTypeï¼šè™šæ‹Ÿæœºå‹å·
+    * input int VMIdï¼šè™šæ‹Ÿæœºid
+    * output ï¼švoid
+    */
     void addVM(map<int, shared_ptr<Server>>& BoughtServ, map<int, shared_ptr<VisualMachine>>& DeployedVM, 
         map<string, shared_ptr<VisualMachine>>& VMsaleable, string VMType, int VMId) {
+
+        
 
         shared_ptr<VisualMachine> VM = make_shared<VisualMachine>(*(VMsaleable[VMType]));
 
         VM->setVMId(VMId);
-
-        shared_ptr<Server> addServer = this->findServerAddVM(BoughtServ, VM);
+        char flag='\0';
+        shared_ptr<Server> addServer = this->findServerAddVM(BoughtServ, VM, flag);
         int serverId = addServer->getServerId();
         VM->setServerId(serverId);
 
-        char ch = this->addUpdate(addServer, VM);
+        char ch = this->addUpdate(addServer, VM,flag);
 
         DeployedVM[VMId] = VM;
 
 
-        // ´òÓ¡¿ØÖÆÌ¨ĞÅÏ¢
+        // æ‰“å°æ§åˆ¶å°ä¿¡æ¯
         if (ch == 'C') {
             cout << "(" << serverId << ")" << endl;
         }
@@ -48,61 +89,63 @@ public:
 
 
     /**
-     * ¸ù¾İ²ßÂÔ£¬ÕÒµ½¿ÉÒÔ²¿ÊğĞéÄâ»úµÄ·şÎñÆ÷¡£µ±Ç°²ßÂÔ£ºµ«·²·şÎñÆ÷×ÊÔ´¹»ÓÃ£¬¾Í²¿ÊğÉÏÈ¥
-     * input map<int, Server&>BoughtServ£ºÒÑ¾­¹ºÂòµÄ·şÎñÆ÷ÁĞ±í
-     * input map<string, shared_ptr<VisualMachine>> VMsaleable£º¿É¹ºÂòĞéÄâ»úµÄÁĞ±í
-     * input string VMType£ºĞèÒª²¿ÊğµÄĞéÄâ»úÀàĞÍ
-     * return Server£º·µ»Ø¿É²¿ÊğµÄ·şÎñÆ÷¶ÔÏó
+     * æ ¹æ®ç­–ç•¥ï¼Œæ‰¾åˆ°å¯ä»¥éƒ¨ç½²è™šæ‹Ÿæœºçš„æœåŠ¡å™¨ã€‚å½“å‰ç­–ç•¥ï¼šä½†å‡¡æœåŠ¡å™¨èµ„æºå¤Ÿç”¨ï¼Œå°±éƒ¨ç½²ä¸Šå»
+     * input map<int, Server&>BoughtServï¼šå·²ç»è´­ä¹°çš„æœåŠ¡å™¨åˆ—è¡¨
+     * input map<string, shared_ptr<VisualMachine>> VMsaleableï¼šå¯è´­ä¹°è™šæ‹Ÿæœºçš„åˆ—è¡¨
+     * input string VMTypeï¼šéœ€è¦éƒ¨ç½²çš„è™šæ‹Ÿæœºç±»å‹
+     * return Serverï¼šè¿”å›å¯éƒ¨ç½²çš„æœåŠ¡å™¨å¯¹è±¡
      */
-    shared_ptr<Server> findServerAddVM(map<int, shared_ptr<Server>>& BoughtServ, shared_ptr<VisualMachine> VM) {
-        shared_ptr<Server> ret;
+    shared_ptr<Server> findServerAddVM(map<int, shared_ptr<Server>>& BoughtServ, shared_ptr<VisualMachine> &VM, char & flag) {
+        
+        //shared_ptr<Server> ret=make_shared<Server>();
 
-        // ±éÀúËùÓĞÒÑ¾­¹ºÂòºÃµÄ·şÎñÆ÷µÄ m
+        // éå†æ‰€æœ‰å·²ç»è´­ä¹°å¥½çš„æœåŠ¡å™¨çš„ m
         for (auto iter : BoughtServ) {
-            if (VM->getNodeType() == 0) { // ĞéÄâ»úÊÇµ¥½ÚµãµÄ£¬ÓĞÒ»¸ö½Úµã´ïµ½ÒªÇó£¬·µ»ØÕâ¸ö·şÎñÆ÷¶ÔÏó
-                if ((iter.second->getPartACPULeft() > VM->getCPUNeed() && iter.second->getPartAMemoryLeft() > VM->getMemoryNeed()) ||
-                    (iter.second->getPartBCPULeft() > VM->getCPUNeed() && iter.second->getPartBMemoryLeft() > VM->getMemoryNeed()))
+            if (VM->getNodeType() == 0) { // è™šæ‹Ÿæœºæ˜¯å•èŠ‚ç‚¹çš„ï¼Œæœ‰ä¸€ä¸ªèŠ‚ç‚¹è¾¾åˆ°è¦æ±‚ï¼Œè¿”å›è¿™ä¸ªæœåŠ¡å™¨å¯¹è±¡
+                if ((iter.second->getPartACPULeft() > VM->getCPUNeed() && iter.second->getPartAMemoryLeft() > VM->getMemoryNeed())) 
                 {
-                    ret = iter.second;
+                    flag='A';
+                    return iter.second;
                     break;
+                }else if(iter.second->getPartBCPULeft() > VM->getCPUNeed() && iter.second->getPartBMemoryLeft() > VM->getMemoryNeed()) {
+                        flag = 'B';
+                            return iter.second;
                 }
             }
-            else { // ĞéÄâ»úÊÇË«½ÚµãµÄ£¬±ØĞëËÄÀà×ÊÔ´¶¼Âú×ãÒªÇó
+            else { // è™šæ‹Ÿæœºæ˜¯åŒèŠ‚ç‚¹çš„ï¼Œå¿…é¡»å››ç±»èµ„æºéƒ½æ»¡è¶³è¦æ±‚
                 if (iter.second->getPartACPULeft() > (VM->getCPUNeed() / 2) && iter.second->getPartBCPULeft() > (VM->getCPUNeed() / 2) &&
                     iter.second->getPartAMemoryLeft() > (VM->getMemoryNeed() / 2) && iter.second->getPartBMemoryLeft() > (VM->getMemoryNeed() / 2)
                     ) {
-                    ret = iter.second;
+                    flag = 'C';
+                    return iter.second;
                     break;
                 }
             }
         }
-       // cout << "²¿ÊğµÄ·şÎñÆ÷ id Îª£º" << ret->getServerId() << endl;
-        return ret;
+       // cout << "éƒ¨ç½²çš„æœåŠ¡å™¨ id ä¸ºï¼š" << ret->getServerId() << endl;
+        //return ret;
     }
 
 
     /**
-     * ²¿ÊğĞéÄâ»úµ½·şÎñÆ÷ÉÏ£¬¸üĞÂ·şÎñÆ÷µÄ×ÊÔ´ĞÅÏ¢£¬²¢´òÓ¡²¿Êğ¿ØÖÆÌ¨ĞÅÏ¢
-     * input shared_ptr<Server> addServer£ºÒª²¿ÊğµÄ·şÎñÆ÷
-     * input shared_ptr<VisualMachine> VM£ºÒª²¿ÊğµÄĞéÄâ»ú
-     * return char£º·µ»Ø²¿ÊğµÄ½ÚµãÀàĞÍ A | B | C
+     * éƒ¨ç½²è™šæ‹Ÿæœºåˆ°æœåŠ¡å™¨ä¸Šï¼Œæ›´æ–°æœåŠ¡å™¨çš„èµ„æºä¿¡æ¯ï¼Œå¹¶æ‰“å°éƒ¨ç½²æ§åˆ¶å°ä¿¡æ¯
+     * input shared_ptr<Server> addServerï¼šè¦éƒ¨ç½²çš„æœåŠ¡å™¨
+     * input shared_ptr<VisualMachine> VMï¼šè¦éƒ¨ç½²çš„è™šæ‹Ÿæœº
+     * return charï¼šè¿”å›éƒ¨ç½²çš„èŠ‚ç‚¹ç±»å‹ A | B | C
      */
-    char addUpdate(shared_ptr<Server>& updateServer, const shared_ptr<VisualMachine>& VM) {
-        // ¸üĞÂ·şÎñÆ÷µÄÊı¾İ
-        if (VM->getNodeType() == 0) {  // µ¥½Úµã£¬ÄÄ¸ö½ÚµãÊ£Óà¿Õ¼ä¶à£¬¾Í·ÅÄÄÀï
-            if (updateServer->getPartACPULeft() > updateServer->getPartBCPULeft()) {
-                updateServer->setPartACPULeft(updateServer->getPartACPULeft() - VM->getCPUNeed());
-                updateServer->setPartAMemoryLeft(updateServer->getPartAMemoryLeft() - VM->getMemoryNeed());
-                VM->setDeployNode('A');
-            }
-            else {
-                updateServer->setPartBCPULeft(updateServer->getPartBCPULeft() - VM->getCPUNeed());
-                updateServer->setPartBMemoryLeft(updateServer->getPartBMemoryLeft() - VM->getMemoryNeed());
-                VM->setDeployNode('B');
-
-            }
+    char addUpdate(shared_ptr<Server>& updateServer, const shared_ptr<VisualMachine>& VM, char& flag) {
+        // æ›´æ–°æœåŠ¡å™¨çš„æ•°æ®
+        if ('A'==flag) {
+            updateServer->setPartACPULeft(updateServer->getPartACPULeft() - VM->getCPUNeed());
+            updateServer->setPartAMemoryLeft(updateServer->getPartAMemoryLeft() - VM->getMemoryNeed());
+            VM->setDeployNode('A');
         }
-        else {  // Ë«½Úµã£¬Æ½·Ö
+        else if ('B' == flag) {
+            updateServer->setPartBCPULeft(updateServer->getPartBCPULeft() - VM->getCPUNeed());
+            updateServer->setPartBMemoryLeft(updateServer->getPartBMemoryLeft() - VM->getMemoryNeed());
+            VM->setDeployNode('B');
+        }
+        else {  // åŒèŠ‚ç‚¹ï¼Œå¹³åˆ†
             updateServer->setPartACPULeft(updateServer->getPartACPULeft() - VM->getCPUNeed() / 2);
             updateServer->setPartAMemoryLeft(updateServer->getPartAMemoryLeft() - VM->getMemoryNeed() / 2);
             updateServer->setPartBCPULeft(updateServer->getPartBCPULeft() - VM->getCPUNeed() / 2);
@@ -111,7 +154,7 @@ public:
         }
         updateServer->setStatus(true);
 
-        // °ÑĞéÄâ»ú²¿Êğµ½·şÎñÆ÷ÉÏ
+        // æŠŠè™šæ‹Ÿæœºéƒ¨ç½²åˆ°æœåŠ¡å™¨ä¸Š
         updateServer->mountedVM[VM->getVMId()] = VM;
 
         return VM->getDeployNode();
@@ -121,40 +164,40 @@ public:
 
 
     /**
-     * É¾³ıÒ»¸öĞéÄâ»ú
-     * input BoughtServ£ºÒÑ¾­¹ºÂòµÄ·şÎñÆ÷µÄ map
-     * input DeployedVM£ºÒÑ¾­²¿ÊğµÄĞéÄâ»úµÄ map
-     * input VMId£ºĞéÄâ»ú id
+     * åˆ é™¤ä¸€ä¸ªè™šæ‹Ÿæœº
+     * input BoughtServï¼šå·²ç»è´­ä¹°çš„æœåŠ¡å™¨çš„ map
+     * input DeployedVMï¼šå·²ç»éƒ¨ç½²çš„è™šæ‹Ÿæœºçš„ map
+     * input VMIdï¼šè™šæ‹Ÿæœº id
      * return void
      */
     void delVM(map<int, shared_ptr<Server>>& BoughtServ, map<int, shared_ptr<VisualMachine>>& DeployedVM, int VMId) {
-        // ÕÒµ½ÒªÉ¾³ıµÄĞéÄâ»ú
+        // æ‰¾åˆ°è¦åˆ é™¤çš„è™šæ‹Ÿæœº
         shared_ptr<VisualMachine> VM = DeployedVM[VMId];
 
-        // ÕÒµ½ĞéÄâ»ú²¿ÊğµÄ·şÎñÆ÷µÄ id
+        // æ‰¾åˆ°è™šæ‹Ÿæœºéƒ¨ç½²çš„æœåŠ¡å™¨çš„ id
         int serverId = VM->getServerId();
 
-        // ÕÒµ½·şÎñÆ÷¶ÔÏó
+        // æ‰¾åˆ°æœåŠ¡å™¨å¯¹è±¡
         shared_ptr<Server> delServer = BoughtServ[serverId];
 
-        // ¸üĞÂ·şÎñÆ÷×ÊÔ´
+        // æ›´æ–°æœåŠ¡å™¨èµ„æº
         this->delUpdate(delServer, VM);
 
-        // ½«ĞéÄâ»ú´ÓÒÑ²¿ÊğµÄ map ÖĞÒÆ³ı
+        // å°†è™šæ‹Ÿæœºä»å·²éƒ¨ç½²çš„ map ä¸­ç§»é™¤
         DeployedVM.erase(VMId);
     }
 
 
 
     /**
-    * É¾³ı¸Ã·şÎñÆ÷ÀïÃæµÄÒ»¸öĞéÄâ»ú
-    * input shared_ptr<Server> & updateServer£ºĞèÒª¸üĞÂµÄ·şÎñÆ÷
-    * input const shared_ptr<VisualMachine> &VM£ºĞèÒªÉ¾³ıµÄĞéÄâ»ú
-    * output £ºvoid
+    * åˆ é™¤è¯¥æœåŠ¡å™¨é‡Œé¢çš„ä¸€ä¸ªè™šæ‹Ÿæœº
+    * input shared_ptr<Server> & updateServerï¼šéœ€è¦æ›´æ–°çš„æœåŠ¡å™¨
+    * input const shared_ptr<VisualMachine> &VMï¼šéœ€è¦åˆ é™¤çš„è™šæ‹Ÿæœº
+    * output ï¼švoid
     */
     void delUpdate(shared_ptr<Server>& updateServer, const shared_ptr<VisualMachine>& VM) {
 
-        // ¶Ô·şÎñÆ÷Êı¾İ½øĞĞ¸üĞÂ
+        // å¯¹æœåŠ¡å™¨æ•°æ®è¿›è¡Œæ›´æ–°
         switch (VM->getDeployNode()) {
         case 'A':
             updateServer->setPartACPULeft(updateServer->getPartACPULeft() + VM->getCPUNeed());
@@ -173,10 +216,12 @@ public:
         default:break;
         }
 
-        // ½«ĞéÄâ»ú´Ó·şÎñÆ÷¹ÒÔØÁĞ±íÖĞÒÆ³ı
+        // å°†è™šæ‹Ÿæœºä»æœåŠ¡å™¨æŒ‚è½½åˆ—è¡¨ä¸­ç§»é™¤
         int VMId = VM->getVMId();
         updateServer->mountedVM.erase(VMId);
     }
 
 
 };
+
+

@@ -6,7 +6,7 @@
 using namespace std;
 
 /*
-*  VisualMachine Àà¹¹Ôìº¯Êı
+*  VisualMachine ç±»æ„é€ å‡½æ•°
 */
 VisualMachine::VisualMachine(string type, int id, int CPUNeed, int memoryNeed, int nodeType):
     type(type),
@@ -16,10 +16,8 @@ VisualMachine::VisualMachine(string type, int id, int CPUNeed, int memoryNeed, i
     nodeType(nodeType)
 {}
 
-// ÎŞ²ÎÊıµÄÄ¬ÈÏ¹¹Ôìº¯Êı
+// æ— å‚æ•°çš„é»˜è®¤æ„é€ å‡½æ•°
 VisualMachine::VisualMachine() {};
-
-
 
 
 // getter

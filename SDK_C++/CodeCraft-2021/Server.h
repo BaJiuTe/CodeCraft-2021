@@ -5,31 +5,32 @@
 #include<vector> 
 #include "VisualMachine.h"
 #include<memory>
+
 using namespace std;
 
 
 class Server {
 private:
-    string type;                        // ·şÎñÆ÷ÀàĞÍ
-    int serverId;                       // ·şÎñÆ÷ id, id ´Ó 0 µİÔö
-    int CPUCapacity;                    // CPU ×ÜÈİÁ¿
-    int partACPULeft;                   // A ½Úµã CPU Ê£Óà
-    int partBCPULeft;                   // B ½Úµã CPU Ê£Óà
-    int memoryCapacity;                 // ÄÚ´æÈİÁ¿
-    int partAMemoryLeft;                // A ½ÚµãÄÚ´æÊ£Óà
-    int partBMemoryLeft;                // B ½ÚµãÄÚ´æÊ£Óà
-    int hardwareCost;                   // Ó²¼ş³É±¾
-    int dailyCost;                      // ÈÕ³£ÄÜºÄ³É±¾
-    bool status;                        // ·şÎñÆ÷×´Ì¬£¬Ä¬ÈÏ¹Ø±Õ£¬ÔÚ add | del | migration µÄÊ±ºòÉèÖÃ
+    string type;                        // æœåŠ¡å™¨ç±»å‹
+    int serverId;                       // æœåŠ¡å™¨ id, id ä» 0 é€’å¢
+    int CPUCapacity;                    // CPU æ€»å®¹é‡
+    int partACPULeft;                   // A èŠ‚ç‚¹ CPU å‰©ä½™
+    int partBCPULeft;                   // B èŠ‚ç‚¹ CPU å‰©ä½™
+    int memoryCapacity;                 // å†…å­˜å®¹é‡
+    int partAMemoryLeft;                // A èŠ‚ç‚¹å†…å­˜å‰©ä½™
+    int partBMemoryLeft;                // B èŠ‚ç‚¹å†…å­˜å‰©ä½™
+    int hardwareCost;                   // ç¡¬ä»¶æˆæœ¬
+    int dailyCost;                      // æ—¥å¸¸èƒ½è€—æˆæœ¬
+    bool status;                        // æœåŠ¡å™¨çŠ¶æ€ï¼Œé»˜è®¤å…³é—­ï¼Œåœ¨ add | del | migration çš„æ—¶å€™è®¾ç½®
 
 
 
 public:
-    map<int, shared_ptr<VisualMachine>> mountedVM;  // ¹ÒÔØµÄĞéÄâ»ú£¬³õÊ¼Îª¿Õ <ĞéÄâ»ú id£¬ ĞéÄâ»úËùÓĞĞÅÏ¢>
+    map<int, shared_ptr<VisualMachine>> mountedVM;  // æŒ‚è½½çš„è™šæ‹Ÿæœºï¼Œåˆå§‹ä¸ºç©º <è™šæ‹Ÿæœº idï¼Œ è™šæ‹Ÿæœºæ‰€æœ‰ä¿¡æ¯>
     
     Server();
 
-    // ¹¹Ôìº¯Êı£¬Ö»ĞèÒª¸ø³ö¹ºÈëÊ±µÄ³õÊ¼×´Ì¬
+    // æ„é€ å‡½æ•°ï¼Œåªéœ€è¦ç»™å‡ºè´­å…¥æ—¶çš„åˆå§‹çŠ¶æ€
     Server(string type, int serverId, int CPUCapacity, int memoryCapacity, int hardwareCost, int dailyCost);
 
     Server(string type, int CPUCapacity, int memoryCapacity, int hardwareCost, int dailyCost);

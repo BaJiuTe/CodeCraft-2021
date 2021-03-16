@@ -1,16 +1,21 @@
-﻿#include "iostream"
+﻿
+#include "iostream"
 #include<fstream>
 #include<string>
 #include<sstream>
 #include<map>
 #include<memory>
 #include"Server.h"
+#include"Server.cpp"
 #include"VisualMachine.h"
+#include"VisualMachine.cpp"
 #include<vector>
 #include"Scheduling.h"
 
 using namespace std;
 
+
+//string path("training-1.txt");
 
 //服务器ID
 
@@ -26,16 +31,6 @@ int ser_id = 0;
 参数3：文件读取的游标
 
 **********************************************************/
-void read_line(istream& line, string& str)
-{
-
-	//定位文件读取位置
-	//line.seekg(start);
-	getline(line, str);//读取文件test.txt的一行到temp
-	//streamoff ret = line.tellg();
-	//line.close();
-	return ;
-}
 
 
 /**********************************************************
@@ -60,13 +55,13 @@ void Serv_info(istringstream& out, map<string, shared_ptr<Server>>& SERpurcheabl
 	out >> str;
 	//str.pop_back();
 	temp->setCPUCapacity(atoi(str.c_str()));
-	temp->setPartACPULeft((temp->getCPUCapacity())/2);
+	temp->setPartACPULeft((temp->getCPUCapacity()) / 2);
 	temp->setPartBCPULeft(temp->getPartACPULeft());
 	//cout << "服务器CPU核数：" << temp->getCPUCapacity() << endl;
 	out >> str;
 	//str.pop_back();
 	temp->setMemoryCapacity(atoi(str.c_str()));
-	temp->setPartAMemoryLeft((temp->getMemoryCapacity())/2);
+	temp->setPartAMemoryLeft((temp->getMemoryCapacity()) / 2);
 	temp->setPartBMemoryLeft(temp->getPartAMemoryLeft());
 	//cout << "服务器内存：" << temp->getMemoryCapacity() << "GB" << endl;
 	out >> str;
@@ -136,8 +131,8 @@ void VirM_info(istringstream& out, map<string, shared_ptr<VisualMachine>>& salea
 参数2：
 
 **********************************************************/
-void Request_info(istringstream& out, Scheduling & sch, map<string, shared_ptr<VisualMachine>> &VMsaleable,
-	map<int, shared_ptr<VisualMachine>> &DeployedVM, map<int, shared_ptr<Server>> &BoughtServ)
+void Request_info(istringstream& out, Scheduling& sch, map<string, shared_ptr<VisualMachine>>& VMsaleable,
+	map<int, shared_ptr<VisualMachine>>& DeployedVM, map<int, shared_ptr<Server>>& BoughtServ)
 {
 	string str;
 	string type;
@@ -156,8 +151,8 @@ void Request_info(istringstream& out, Scheduling & sch, map<string, shared_ptr<V
 		//cout << "ID：" << ID << endl;
 
 		//添加虚拟机, ID ,type
-
-		sch.addVM(BoughtServ,DeployedVM,VMsaleable,type,ID);
+		//sch.showMessage(VMsaleable, BoughtServ, DeployedVM);
+		sch.addVM(BoughtServ, DeployedVM, VMsaleable, type, ID);
 
 	}
 	else if (str == "del") {
@@ -184,62 +179,77 @@ void Request_info(istringstream& out, Scheduling & sch, map<string, shared_ptr<V
 参数4: 购买的服务器内存需求
 
 **********************************************************/
-void PurchaseServer( map< string, shared_ptr< Server > >& SERpurcheable , map< int, shared_ptr< Server > >& BoughtServ,
-					int CPUneed,int Memoryneed)
+void PurchaseServer(int i, map< string, shared_ptr< Server > >& SERpurcheable, map< int, shared_ptr< Server > >& BoughtServ,
+	int CPUneed, int Memoryneed,int releasCPU, int releasMem)
 {
+
+
+
 	int LeftCpu = 0;
 	int LeftMem = 0;
+
 	int count = ser_id;
 	//当没有购买任何服务器则先购买一台
-	if (BoughtServ.empty()) {
-		auto temp = (*(SERpurcheable.begin()->second));
+	/*if (BoughtServ.empty()) {
+		auto temp = (*(SERpurcheable["host78K52"]));
 		auto temp_ptr = make_shared<Server>(temp);
 		temp_ptr->setServerId(ser_id);
 		BoughtServ[ser_id++] = temp_ptr;
-	}
+
+	}*/
 
 
 	//统计剩余服务器中有多少的剩余
-	for (auto it: BoughtServ) {
-		
+	for (auto it : BoughtServ) {
+
 		LeftCpu += it.second->getPartACPULeft();
 		LeftCpu += it.second->getPartBCPULeft();
 		LeftMem += it.second->getPartAMemoryLeft();
 		LeftMem += it.second->getPartBMemoryLeft();
-	
+
 	}
 
 	//接下来买服务器
-	int deltaCPU = CPUneed - LeftCpu;
-	int deltaMem = Memoryneed - LeftMem;
+	int deltaCPU = CPUneed - releasCPU;
+	int deltaMem = Memoryneed - releasMem;
 
 	//目前购买策略并没完善，先买一台的方式进行处理。
 	/*for (auto it : SERpurcheable) {
-		
-		
+
+
 	}*/
-	
 
-	//要购买的台数
 	int nums = 0;
-	auto temp =(*(SERpurcheable.begin()->second));//temp为选定的要买的服务器对象
-	int c=deltaCPU / temp.getCPUCapacity();
-	int m = deltaMem / temp.getMemoryCapacity();
-	m < c ? nums = c + 1: nums = m+1;
+	auto temp = (*(SERpurcheable["host78K52"]));//temp为选定的要买的服务器对象
+	
+	 if (CPUneed + 40000 >= LeftCpu || Memoryneed + 40000 >= LeftMem) {
+		//要购买的台数
+		int c = deltaCPU / temp.getCPUCapacity();
+		int m = deltaMem / temp.getMemoryCapacity();
+		m < c ? nums = c + 5 : nums = m +5 ;
+	}
 
-	for (int i=0;i<nums-1;i++)
+	
+	for (int i = 0; i < nums ; i++)
 	{
 		auto temp_ptr = make_shared<Server>(temp);
 		temp_ptr->setServerId(ser_id);
 		BoughtServ[ser_id++] = temp_ptr;
 	}
-	
+
 	//cout << "********购买***********" << endl;
 	//输出购买的台数
-	cout << "(purchase, " << ser_id - count << ")" << endl;
 
-	if(ser_id - count!=0)
-		cout << "(" << BoughtServ[count]->getType() << "," << ser_id - count << ")" << endl;
+
+	if (ser_id - count != 0) {
+
+		cout << "(purchase, 1)" << endl;
+		cout << "(" << BoughtServ[count]->getType() << ", " << ser_id - count << ")" << endl;
+	}
+	else
+	{
+		cout << "(purchase, 0)" << endl;
+	}
 }
 
 
@@ -254,8 +264,8 @@ void PurchaseServer( map< string, shared_ptr< Server > >& SERpurcheable , map< i
 参数4: 一条序列内存需求
 
 **********************************************************/
-void QuestNeed(istringstream &out, map<string, shared_ptr<VisualMachine>> & VMsaleable,
-				int * cpu, int * memory)
+void QuestNeed(istringstream& out, map<string, shared_ptr<VisualMachine>>& VMsaleable,
+		map<int, shared_ptr<VisualMachine>> &DeployedVM,int* cpu, int* memory,int *releasCPU,int *releasMem)
 {
 	string str;
 	string type;
@@ -268,10 +278,17 @@ void QuestNeed(istringstream &out, map<string, shared_ptr<VisualMachine>> & VMsa
 		out >> type;
 		type.pop_back();
 		//cout << "型号：" << type << "  ";
-		*(cpu)+=(*VMsaleable[type]).getCPUNeed();
+		*(cpu) += (*VMsaleable[type]).getCPUNeed();
 		*(memory) += (*VMsaleable[type]).getMemoryNeed();
+	}else { 
+
+		out >> type;//实际为ID
+		int ID = atoi(type.c_str());
+		*releasCPU += DeployedVM[ID]->getCPUNeed();
+		*releasMem += DeployedVM[ID]->getMemoryNeed();
+	
 	}
-	return ;
+	return;
 }
 
 
@@ -287,54 +304,65 @@ void QuestNeed(istringstream &out, map<string, shared_ptr<VisualMachine>> & VMsa
 
 * *********************************************************/
 
-void Day_task(istream& line, map<string, shared_ptr<VisualMachine>> &VMsaleable,
-	              map< string, shared_ptr< Server > >& SERpurcheable, map< int, shared_ptr< Server > >& BoughtServ,
-					map<int, shared_ptr<VisualMachine>> &DeployedVM)
+void Day_task(int i, map<string, shared_ptr<VisualMachine>>& VMsaleable,
+	map< string, shared_ptr< Server > >& SERpurcheable, map< int, shared_ptr< Server > >& BoughtServ,
+	map<int, shared_ptr<VisualMachine>>& DeployedVM)
 {
+
 	//info中存放一天的信息，包括所有序列
 	vector<string> info;
 	//当天的CPU总需求
 	int CPUneed = 0;
 	//当天的内存需求
 	int Memoryneed = 0;
+	//当天释放的cpu
+	int releasCPU = 0;
+	int releasMem = 0;
+
 	string str;
-	read_line(line, str);
+	getline(cin, str);
 
 	//读取当天的所有序列，并做解析
 	int n = atoi(str.c_str());
 	//求和，保存信息
 	for (int i = 0; i < n; i++) {
 
-		read_line(line, str);
+		getline(cin, str);
 		//将每天的序列保存起来方便后续使用
 		info.push_back(str);
 		//
 		istringstream out(str);
-		QuestNeed(out, VMsaleable,&CPUneed,&Memoryneed);
+		QuestNeed(out, VMsaleable, DeployedVM,&CPUneed, &Memoryneed, &releasCPU, &releasMem);
 		//istringstream out1(str);
 		//Request_info(out1);
 	}
 	//cout << "*********CPU需求：" << CPUneed << " *********" << endl;
 	//cout << "*********内存需求：" << Memoryneed << " *********" << endl;
-	
-	PurchaseServer(SERpurcheable,BoughtServ,CPUneed, Memoryneed);
+
+	PurchaseServer(i, SERpurcheable, BoughtServ, CPUneed, Memoryneed,releasCPU,releasMem);
+
+	/*for (auto it : BoughtServ) {
+		cout << "型号： "<<it.second->getType()<<"   ID:" <<it.second->getServerId() << endl;
+	}*/
+
 
 	cout << "(migration, 0)" << endl;
 
-	/*for (auto it : BoughtServ) {
-		cout << "目前已购买的Id:" << it.second->getServerId() << "  型号：" << it.second->getType() << endl;
+	/*for (auto iter : BoughtServ) {
+		cout << "（" << iter.second->getType() << "，" << iter.second->getServerId() << ", " << iter.second->getPartACPULeft() << ", "
+			<< iter.second->getPartBCPULeft() << ", " << iter.second->getPartAMemoryLeft() << ", " << iter.second->getPartBMemoryLeft() << ")" << endl;
 	}*/
 
 	//处理数据
 
-	for (int i = 0; i < info.size(); i++ ) {
-		
+	for (int i = 0; i < info.size(); i++) {
+
 		istringstream out(info[i]);
 		Scheduling s;
-		Request_info(out,s,VMsaleable,DeployedVM,BoughtServ);
+		Request_info(out, s, VMsaleable, DeployedVM, BoughtServ);
 	}
 
-	
+	return;
 
 }
 
@@ -384,15 +412,18 @@ int main()
 
 
 	//读取可采购服务器种类数目
+	//ifstream reader(path);
 	string temp;
-	read_line(cin, temp);
-	//cout << temp << endl;
+
+	getline(cin, temp);
 
 	//依次读取每台的服务器的信息，并解析信息的格式
 	int n = atoi(temp.c_str());
+	//cout << "可购买服务器数： " << n << endl;
 	for (int i = 0; i < n; i++) {
 
-		read_line(cin, temp);
+		//now = read_line(reader, temp, now);
+		getline(cin, temp);
 		//cout << temp << endl;
 		istringstream out(temp);
 		Serv_info(out, SERpurcheable);
@@ -407,14 +438,15 @@ int main()
 
 
 	//读取可售卖的虚拟机的数目
-	read_line(cin, temp);
+	//now = read_line(reader, temp, now);
+	getline(cin, temp);
 	//cout << "可购买虚拟机种数： " <<temp << endl;
 
 	//依次读取每台的虚拟机的信息，并解析信息的格式	
 	n = atoi(temp.c_str());
 	for (int i = 0; i < n; i++) {
 
-		read_line(cin, temp);
+		getline(cin, temp);
 		//cout << temp << endl;
 		istringstream out(temp);
 		VirM_info(out, VMsaleable);
@@ -432,17 +464,20 @@ int main()
 	******************************************************************************/
 
 
-	read_line(cin, temp);
+	//now = read_line(reader, temp, now);
+	getline(cin, temp);
 	//cout << temp << endl;
 
 	//依次读取每天的序列，并解析序列的格式	
 	n = atoi(temp.c_str());
 	//cout <<  n << "天的数据需要处理" << endl;
 	for (int i = 0; i < n; i++) {
-
-		Day_task(cin,VMsaleable,SERpurcheable,BoughtServ,DeployedVM);
+		//cout << "***********第" << i << "天******************" << endl;
+		Day_task(i, VMsaleable, SERpurcheable, BoughtServ, DeployedVM);
 
 	}
 
+	//reader.close();
+	//cout << ser_id << endl;
 	return 0;
 }
