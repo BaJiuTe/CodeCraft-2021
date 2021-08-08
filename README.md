@@ -2,11 +2,11 @@
 
 ### 一、问题描述
 给定服务器的型号参数列表，包括（**服务器的型号，CPU核数，内存大小，硬件成本，每天能耗成本**）。
-![服务器示例](https://github.com/BaJiuTe/CodeCraft-2021/tree/main/images/1.png)
+![服务器示例](https://github.com/BaJiuTe/CodeCraft-2021/images/1.png)
 
 
 给定所有可申请的虚拟机型号，包括（**虚拟机的型号，CPU核数，内存大小，是否单双节点部署**）。
-![虚拟机示例](https://github.com/BaJiuTe/CodeCraft-2021/tree/main/images/2.png)
+![虚拟机示例](https://github.com/BaJiuTe/CodeCraft-2021/images/2.png)
 
 #### 1. 输入
 每个测试用例包括以下内容：
@@ -146,7 +146,7 @@
 
 ### 四、结果与感想
 排名：50/573，一轮游，喜提三等奖。
-![最终排名](https://github.com/BaJiuTe/CodeCraft-2021/tree/main/images/3.png)
+![最终排名](https://github.com/BaJiuTe/CodeCraft-2021/images/3.png)
 
 总的来说，对自己代码提升还是挺大的，队友都很给力。
 
