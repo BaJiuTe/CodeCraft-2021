@@ -6,7 +6,7 @@
 using namespace std;
 
 /*
-*  VisualMachine ç±»æž„é€ å‡½æ•°
+*  VisualMachine Àà¹¹Ôìº¯Êý
 */
 VisualMachine::VisualMachine(string type, int id, int CPUNeed, int memoryNeed, int nodeType):
     type(type),
@@ -16,8 +16,10 @@ VisualMachine::VisualMachine(string type, int id, int CPUNeed, int memoryNeed, i
     nodeType(nodeType)
 {}
 
-// æ— å‚æ•°çš„é»˜è®¤æž„é€ å‡½æ•°
+// ÎÞ²ÎÊýµÄÄ¬ÈÏ¹¹Ôìº¯Êý
 VisualMachine::VisualMachine() {};
+
+
 
 
 // getter
@@ -50,6 +52,12 @@ char VisualMachine::getDeployNode() {
     return deployNode;
 }
 
+double VisualMachine::getScore()
+{
+    double ret;
+    ret = (double)getCPUNeed() / getMemoryNeed();
+    return ret;
+}
 
 // setter
 void VisualMachine::setType(string type) {
@@ -79,3 +87,6 @@ void VisualMachine::setServerId(int serverId) {
 void VisualMachine::setDeployNode(char deployNode) {
     this->deployNode = deployNode;
 }
+
+
+

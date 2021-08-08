@@ -2,6 +2,9 @@
 #include<memory>
 #include<string.h>
 #include"Server.h"
+#include<memory>
+#include<cmath>
+
 
 using namespace std;
 
@@ -20,12 +23,12 @@ Server::Server():
 {}
 
 /*
-* æž„é€ å‡½æ•°ï¼Œåªéœ€è¦ç»™å‡ºè´­å…¥æ—¶çš„åˆå§‹çŠ¶æ€
-* input typeï¼šæœåŠ¡å™¨ç±»åž‹
-* input CPUCapacityï¼šCPU å®¹é‡
-* input memoryCapacityï¼šå†…å­˜å®¹é‡
-* input hardwareCostï¼šç¡¬ä»¶æˆæœ¬
-* input dailyCostï¼šæ—¥å¸¸æˆæœ¬
+* ¹¹Ôìº¯Êý£¬Ö»ÐèÒª¸ø³ö¹ºÈëÊ±µÄ³õÊ¼×´Ì¬
+* input type£º·þÎñÆ÷ÀàÐÍ
+* input CPUCapacity£ºCPU ÈÝÁ¿
+* input memoryCapacity£ºÄÚ´æÈÝÁ¿
+* input hardwareCost£ºÓ²¼þ³É±¾
+* input dailyCost£ºÈÕ³£³É±¾
 */
 Server::Server(string type, int serverId, int CPUCapacity, int memoryCapacity, int hardwareCost, int dailyCost)
     : type(type), 
@@ -101,6 +104,36 @@ bool Server::getStatus() {
     return status;
 }
 
+//»ñµÃÃ¿¸ö·þÎñÆ÷µÄ¸ºÔØ¾ùºâ·ÖÊý
+double Server::getAScore() {
+    double ret;
+    /*double RatioCpu = ( (double)getCPUCapacity()/2.0- (double)getPartACPULeft() ) / ((double)getCPUCapacity()/2.0);
+    double RatioMem = ((double)getMemoryCapacity()/2.0 - (double)getPartAMemoryLeft() ) / ((double)getMemoryCapacity()/2.0);*/
+    
+    ret = (double)getPartACPULeft() / getPartAMemoryLeft();
+    return ret*10;
+}
+
+double Server::getBScore() {
+    double ret;
+    /*double RatioCpu = ((double)getCPUCapacity() / 2 - (double)getPartBCPULeft()) / ((double)getCPUCapacity() / 2);
+    double RatioMem = ((double)getMemoryCapacity() / 2 - (double)getPartBMemoryLeft()) / ((double)getMemoryCapacity() / 2);*/
+    ret = (double)getPartACPULeft() / getPartAMemoryLeft();
+    return ret * 10;
+}
+
+
+double Server::getScore() {
+    double ret;
+    ret = (double)getCPUCapacity()/getMemoryCapacity();
+    return ret;
+}
+
+
+bool Server::isAmore()
+{
+    return getPartACPULeft() >= getPartBCPULeft() && getPartAMemoryLeft() >= getPartAMemoryLeft();
+}
 
 
 

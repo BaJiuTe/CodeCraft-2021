@@ -6,23 +6,33 @@ using namespace std;
 
 class VisualMachine {
 private:
-    string type;            // è™šæ‹Ÿæœºç±»å‹
-    int VMId;               // è™šæ‹Ÿæœº id
-    int CPUNeed;            // CPU éœ€æ±‚
-    int memoryNeed;         // å†…å­˜éœ€æ±‚
-    int nodeType;           // èŠ‚ç‚¹ç±»å‹ 0:å•èŠ‚ç‚¹ï¼Œ1ï¼šåŒèŠ‚ç‚¹
-    int serverId;           // éƒ¨ç½²åˆ°å“ªä¸€ä¸ªæœåŠ¡å™¨ä¸Š
-    char deployNode;        // éƒ¨ç½²åˆ°æœåŠ¡å™¨ä¸Šå“ªä¸ªèŠ‚ç‚¹ï¼Œ'A','B','C'ï¼šåŒèŠ‚ç‚¹
+    string type;            // ĞéÄâ»úÀàĞÍ
+    int VMId;               // ĞéÄâ»ú id
+    int CPUNeed;            // CPU ĞèÇó
+    int memoryNeed;         // ÄÚ´æĞèÇó
+    int nodeType;           // ½ÚµãÀàĞÍ 0:µ¥½Úµã£¬1£ºË«½Úµã
+    int serverId;           // ²¿Êğµ½ÄÄÒ»¸ö·şÎñÆ÷ÉÏ
+    char deployNode;        // ²¿Êğµ½·şÎñÆ÷ÉÏÄÄ¸ö½Úµã£¬'A','B','C'£ºË«½Úµã
+
+
+    
+
 
 public:
 
 
-    // VisualMachine ç±»æ„é€ å‡½æ•°
+    // VisualMachine Àà¹¹Ôìº¯Êı
     VisualMachine(string type, int VMId, int CPUNeed, int memoryNeed, int sigle);
     VisualMachine();
 
 
-    // getter    
+
+    double getScore();
+
+    
+
+
+        // getter    
     string getType();
     int getVMId();
     int getCPUNeed();
